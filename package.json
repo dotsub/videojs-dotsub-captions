@@ -1,5 +1,5 @@
 {
-  "name": "@dotsub/videojs-dotsub-captions",
+  "name": "videojs-dotsub-captions",
   "version": "0.0.0",
   "description": "Renders rich captions ",
   "main": "es5/plugin.js",
@@ -12,12 +12,14 @@
     "build:js": "npm-run-all build:js:babel build:js:browserify build:js:bannerize build:js:uglify",
     "build:js:babel": "babel src -d es5",
     "build:js:bannerize": "bannerize dist/videojs-dotsub-captions.js --banner=scripts/banner.ejs",
-    "build:js:browserify": "browserify . -s videojs-dotsub-captions -o dist/videojs-dotsub-captions.js",
+    "build:js:browserify": "browserify . -s videojs-dotsub-captions -t browserify-shim -o dist/videojs-dotsub-captions.js",
     "build:js:uglify": "uglifyjs dist/videojs-dotsub-captions.js --comments --mangle --compress -o dist/videojs-dotsub-captions.min.js",
-    "build:test": "babel-node scripts/build-test.js",
+    "build:test": "npm-run-all mkdirs build:test:browserify",
+    "build:test:browserify": "browserify `find test -name '*.test.js'` -t babelify -t browserify-shim -o dist-test/videojs-dotsub-captions.js",
     "change": "chg add",
     "clean": "rimraf dist test/dist es5 && mkdirp dist test/dist es5",
     "lint": "vjsstandard",
+    "mkdirs": "mkdir -p dist dist-test es5",
     "start": "babel-node scripts/server.js",
     "pretest": "npm-run-all lint build",
     "test": "karma start test/karma.conf.js",
@@ -32,16 +34,11 @@
   },
   "keywords": [
     "videojs",
-    "videojs-plugin"
+    "videojs-plugin",
+    "captions"
   ],
   "author": "Brooks Lyrette <brooks@dotsub.com>",
   "license": "Apache-2.0",
-  "browserify": {
-    "transform": [
-      "browserify-shim",
-      "browserify-versionify"
-    ]
-  },
   "browserify-shim": {
     "qunit": "global:QUnit",
     "sinon": "global:sinon",
@@ -52,9 +49,15 @@
     "style": "dist/videojs-dotsub-captions.css",
     "script": "dist/videojs-dotsub-captions.min.js"
   },
+  "browserify-shim": {
+    "qunit": "global:QUnit",
+    "sinon": "global:sinon",
+    "video.js": "global:videojs"
+  },
   "vjsstandard": {
     "ignore": [
       "dist",
+      "dist-test",
       "docs",
       "es5",
       "test/dist",
@@ -72,7 +75,9 @@
     "test/"
   ],
   "dependencies": {
-    "video.js": "^5.6.0"
+    "global": "^4.3.0",
+    "object.assign": "^4.0.3",
+    "video.js": "^5.9.0"
   },
   "devDependencies": {
     "babel": "^5.8.35",
@@ -81,11 +86,9 @@
     "bluebird": "^3.2.2",
     "browserify": "^12.0.2",
     "browserify-shim": "^3.8.12",
-    "browserify-versionify": "^1.0.6",
     "budo": "^8.0.4",
     "chg": "^0.3.2",
     "glob": "^6.0.3",
-    "global": "^4.3.0",
     "karma": "^0.13.19",
     "karma-chrome-launcher": "^0.2.2",
     "karma-detect-browsers": "^2.0.2",
