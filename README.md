@@ -1,6 +1,6 @@
 # videojs-dotsub-captions
 
-Renders rich captions 
+Renders rich captions
 
 ## Installation
 
@@ -39,6 +39,23 @@ var videojs = require('video.js');
 require('videojs-dotsub-captions');
 
 var player = videojs('my-video');
+
+player.dotsubCaptions();
+```
+
+### Browserify ES6
+
+When using with Browserify, install videojs-dotsub-captions via npm and `import` the plugin as you would any other module.
+
+```js
+import videojs from 'video.js';
+
+// The actual plugin function is exported by this module, but it is also
+// attached to the `Player.prototype`; so, there is no need to assign it
+// to a variable.
+import 'videojs-dotsub-captions';
+
+const player = videojs('my-video');
 
 player.dotsubCaptions();
 ```
