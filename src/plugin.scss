@@ -17,9 +17,7 @@
     .vjs-caption-containter {
       opacity: 0.99;
       position: absolute;
-      bottom: 40px;
       width: 100%;
-      text-align: center;
 
       @include transition(bottom 1.0s);
 
@@ -37,8 +35,8 @@
         }
       }
     }
-    &.vjs-user-inactive.vjs-playing .vjs-caption-containter {
-      bottom: 15px;
-    }
+    // &.vjs-user-inactive.vjs-playing .vjs-caption-containter {
+    //   bottom: 15px;
+    // }
   }
 }

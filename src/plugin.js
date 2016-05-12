@@ -65,6 +65,32 @@ const updateCaption = (player) => {
 
   // TODO: There can now be two captions with the same timecode.
   if (textElement && captions[0]) {
+
+    // set the horizontal position
+    if (captions[0].horizontalPosition) {
+      textContainer.style['text-align'] = captions[0].horizontalPosition.toLowerCase();
+    } else {
+      textContainer.style['text-align'] = 'center';
+    }
+
+    //set the vertical position
+    if (captions[0].verticalPosition) {
+      const vp = captions[0].verticalPosition;
+      if (vp === 'BOTTOM') {
+        textContainer.style.bottom = '40px';
+        textContainer.style.top = '';
+      } else if (vp === 'MIDDLE') {
+        textContainer.style.bottom = '';
+        textContainer.style.top = `${player.height()/3 + 10}px`;
+      } else if (vp === 'TOP') {
+        textContainer.style.bottom = '';
+        textContainer.style.top = '10px';
+      }
+    } else {
+      textContainer.bottom = '40px';
+      textContainer.style.top = '';
+    }
+
     textElement.innerHTML = convertToHtml(captions[0]);
     textContainer.classList.remove('vjs-hidden');
   } else {
@@ -111,7 +137,7 @@ const setLanguage = (player, language) => {
 };
 
 /**
- * Sets up HTML in the player for caption rendering. 
+ * Sets up HTML in the player for caption rendering.
  *
  * Expects { direction: 'rtl' or 'ltr' }
  *
@@ -128,10 +154,10 @@ const setupCaptions = (player) => {
   container.appendChild(wrapper);
   wrapper.appendChild(span);
   container.classList.add('vjs-caption-containter');
+  container.classList.add('vjs-hidden');
   wrapper.classList.add('vjs-caption');
   span.classList.add('vjs-text');
 
-  span.innerHTML = 'Testing!!';
   videoEl.appendChild(container);
 };
 
