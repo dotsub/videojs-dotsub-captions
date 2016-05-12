@@ -1,3 +1,11 @@
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+
 // Sass for videojs-dotsub-captions
 
 .video-js {
@@ -5,5 +13,32 @@
   // This class is added to the video.js element by the plugin by default.
   &.vjs-dotsub-captions {
     display: block;
+
+    .vjs-caption-containter {
+      opacity: 0.99;
+      position: absolute;
+      bottom: 40px;
+      width: 100%;
+      text-align: center;
+
+      @include transition(bottom 1.0s);
+
+      .vjs-caption {
+        color: #fff;
+        font-size: 2em;
+
+        .vjs-text {
+          background-color: rgba(0, 0, 0, 0.7);
+          padding: 5px;
+
+          b {
+            font-weight: 800;
+          }
+        }
+      }
+    }
+    &.vjs-user-inactive.vjs-playing .vjs-caption-containter {
+      bottom: 15px;
+    }
   }
 }
