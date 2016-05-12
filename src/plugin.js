@@ -8,12 +8,21 @@ const defaults = {
 
 let settings = {};
 
+/**
+ * Supported formatting styles 'NAME': ['startTag', 'endTag']
+ */
 const styleToTag = {
   BOLD: ['<b>', '</b>'],
   ITALIC: ['<i>', '</i>'],
   UNDERLINE: ['<u>', '</u>']
 };
 
+/**
+ * Function is used to convert a caption object to renderable HTML.
+ *
+ * @function convertToHtml
+ * @param    {Array} [caption={Caption}]
+ */
 const convertToHtml = (caption) => {
   let displayValue = '';
   const str = caption.content;
@@ -37,6 +46,12 @@ const convertToHtml = (caption) => {
   return displayValue.replace(/\n/g, '<br/>');
 };
 
+/**
+ * Renders the captions that should be on screen.
+ *
+ * @function updateCaption
+ * @param    {Player} player
+ */
 const updateCaption = (player) => {
   const time = player.currentTime() * 1000;
 
@@ -95,6 +110,14 @@ const setLanguage = (player, language) => {
   textElements.forEach(element => element.direction = language.direction);
 };
 
+/**
+ * Sets up HTML in the player for caption rendering. 
+ *
+ * Expects { direction: 'rtl' or 'ltr' }
+ *
+ * @function setupCaptions
+ * @param    {Player} player
+ */
 const setupCaptions = (player) => {
   // set up divs for rendering
   const videoEl = player.el();
