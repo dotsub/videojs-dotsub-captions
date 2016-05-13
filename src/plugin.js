@@ -149,7 +149,7 @@ const setupCaptions = (player) => {
   const videoEl = player.el();
   const container = document.createElement('div');
   const wrapper = document.createElement('div');
-  const span = document.createElement('span');
+  const span = document.createElement('div');
 
   container.appendChild(wrapper);
   wrapper.appendChild(span);
