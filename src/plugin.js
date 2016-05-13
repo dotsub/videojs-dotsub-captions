@@ -6,7 +6,9 @@ const defaults = {
   captions: []
 };
 
-let settings = {};
+let settings = {
+  display: [] // the captions being currently displayed.
+};
 
 /**
  * Supported formatting styles 'NAME': ['startTag', 'endTag']
@@ -60,42 +62,49 @@ const updateCaption = (player) => {
     return caption.start <= time && caption.end >= time;
   });
 
-  const textElement = videoEl.getElementsByClassName('vjs-text')[0];
-  const textContainer = videoEl.getElementsByClassName('vjs-caption-containter')[0];
+  if (!(JSON.stringify(captions) === JSON.stringify(settings.display))) {
+    
+    const textElement = videoEl.getElementsByClassName('vjs-text')[0];
+    const textContainer = videoEl.getElementsByClassName('vjs-caption-containter')[0];
 
-  // TODO: There can now be two captions with the same timecode.
-  if (textElement && captions[0]) {
-
-    // set the horizontal position
-    if (captions[0].horizontalPosition) {
-      textContainer.style['text-align'] = captions[0].horizontalPosition.toLowerCase();
-    } else {
-      textContainer.style['text-align'] = 'center';
-    }
-
-    //set the vertical position
-    if (captions[0].verticalPosition) {
-      const vp = captions[0].verticalPosition;
-      if (vp === 'BOTTOM') {
-        textContainer.style.bottom = '40px';
-        textContainer.style.top = '';
-      } else if (vp === 'MIDDLE') {
-        textContainer.style.bottom = '';
-        textContainer.style.top = `${player.height()/3 + 10}px`;
-      } else if (vp === 'TOP') {
-        textContainer.style.bottom = '';
-        textContainer.style.top = '10px';
+    // TODO: There can now be two captions with the same timecode.
+    if (textElement && captions[0]) {
+      // set the horizontal position
+      if (captions[0].horizontalPosition) {
+        textContainer.style['text-align'] = captions[0].horizontalPosition.toLowerCase();
+      } else {
+        textContainer.style['text-align'] = 'center';
       }
-    } else {
-      textContainer.bottom = '40px';
-      textContainer.style.top = '';
-    }
 
-    textElement.innerHTML = convertToHtml(captions[0]);
-    textContainer.classList.remove('vjs-hidden');
-  } else {
-    textElement.innerHTML = '';
-    textContainer.classList.add('vjs-hidden');
+      //set the vertical position
+      if (captions[0].verticalPosition) {
+        const vp = captions[0].verticalPosition;
+        if (vp === 'BOTTOM') {
+          textContainer.style.bottom = '40px';
+          textContainer.style.top = '';
+        } else if (vp === 'MIDDLE') {
+          textContainer.style.bottom = '';
+          textContainer.style.top = `${player.height()/3 + 10}px`;
+        } else if (vp === 'TOP') {
+          textContainer.style.bottom = '';
+          textContainer.style.top = '10px';
+        }
+      } else {
+        textContainer.bottom = '40px';
+        textContainer.style.top = '';
+      }
+
+      textElement.innerHTML = convertToHtml(captions[0]);
+      textContainer.classList.remove('vjs-hidden');
+
+      settings.display = captions;
+
+    } else {
+      textElement.innerHTML = '';
+      textContainer.classList.add('vjs-hidden');
+
+      settings.display = [];
+    }
   }
 };
 
@@ -148,6 +157,7 @@ const setupCaptions = (player) => {
   // set up divs for rendering
   const videoEl = player.el();
   const container = document.createElement('div');
+  // TODO: move this (need one for each caption being rendered)
   const wrapper = document.createElement('div');
   const span = document.createElement('div');
 
@@ -155,10 +165,19 @@ const setupCaptions = (player) => {
   wrapper.appendChild(span);
   container.classList.add('vjs-caption-containter');
   container.classList.add('vjs-hidden');
+  // TODO: move this (need one for each caption being rendered)
   wrapper.classList.add('vjs-caption');
   span.classList.add('vjs-text');
 
   videoEl.appendChild(container);
+
+  // export functions to be called externally
+  player.setCaptions = (captions) => setCaptions(player, captions);
+  player.setLanguage = (langauge) => setLanguage(player, langauge);
+  // setup event listeners a well.
+  player.on('captions', (event, data) => setCaptions(player, data));
+  player.on('language', (event, data) => setCaptions(player, data));
+  player.on('timeupdate', () => updateCaption(player));
 };
 
 /**
@@ -177,13 +196,6 @@ const onPlayerReady = (player, options) => {
 
   setupCaptions(player);
 
-  // export functions to be called externally
-  player.setCaptions = (captions) => setCaptions(player, captions);
-  player.setLanguage = (langauge) => setLanguage(player, langauge);
-  // setup event listeners a well.
-  player.on('captions', (event, data) => setCaptions(player, data));
-  player.on('language', (event, data) => setCaptions(player, data));
-  player.on('timeupdate', () => updateCaption(player));
   // emit that the player is ready to receive captions
   player.trigger('captionsready');
 };
