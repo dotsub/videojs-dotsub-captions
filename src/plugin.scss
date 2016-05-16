@@ -7,9 +7,7 @@
 }
 
 // Sass for videojs-dotsub-captions
-
 .video-js {
-
   // This class is added to the video.js element by the plugin by default.
   &.vjs-dotsub-captions {
     display: block;
@@ -19,7 +17,6 @@
       position: absolute;
       width: 100%;
       padding: 0 15px;
-
       @include transition(bottom 1.0s);
 
       .vjs-caption {
@@ -39,8 +36,5 @@
         }
       }
     }
-    // &.vjs-user-inactive.vjs-playing .vjs-caption-containter {
-    //   bottom: 15px;
-    // }
   }
 }

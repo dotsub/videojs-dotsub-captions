@@ -6,8 +6,9 @@ const defaults = {
   captions: []
 };
 
+// the captions being currently displayed.
 let settings = {
-  display: [] // the captions being currently displayed.
+  display: []
 };
 
 /**
@@ -49,6 +50,70 @@ const convertToHtml = (caption) => {
 };
 
 /**
+ * Creates a container that holds caption. Uses the position of the passed in
+ * caption as the location for the container.
+ *
+ * @function createContainer
+ * @param    {Object} caption
+ * @param    {Player} player
+ */
+const createContainer = (caption, player) => {
+  const container = document.createElement('div');
+
+  container.direction = settings.language.direction;
+  container.classList.add('vjs-caption-containter');
+  // set the horizontal position
+  if (caption.horizontalPosition) {
+    container.style['text-align'] = caption.horizontalPosition.toLowerCase();
+  } else {
+    container.style['text-align'] = 'center';
+  }
+
+  // set the vertical position
+  if (caption.verticalPosition) {
+    const vp = caption.verticalPosition;
+
+    if (vp === 'BOTTOM') {
+      container.style.bottom = '40px';
+      container.style.top = '';
+    } else if (vp === 'MIDDLE') {
+      container.style.bottom = '';
+      container.style.top = `${player.height() / 3 + 10}px`;
+    } else if (vp === 'TOP') {
+      container.style.bottom = '';
+      container.style.top = '10px';
+    }
+  } else {
+    container.bottom = '40px';
+    container.style.top = '';
+  }
+
+  return container;
+};
+
+/**
+ * Renders a caption into the player/container.
+ *
+ * @function renderCaption
+ * @param    {Object} caption
+ * @param    {Player} player
+ * @param    {DOMElement} container
+ */
+const renderCaption = (caption, player, container) => {
+  const videoEl = player.el();
+  const wrapper = document.createElement('div');
+  const span = document.createElement('div');
+
+  container.appendChild(wrapper);
+  wrapper.appendChild(span);
+  wrapper.classList.add('vjs-caption');
+  span.classList.add('vjs-text');
+  videoEl.appendChild(container);
+
+  span.innerHTML = convertToHtml(caption);
+};
+
+/**
  * Renders the captions that should be on screen.
  *
  * @function updateCaption
@@ -65,7 +130,9 @@ const updateCaption = (player) => {
   if (!(JSON.stringify(captions) === JSON.stringify(settings.display))) {
 
     // clear the existing content
-    const oldCaptionContainers = Array.from(videoEl.getElementsByClassName('vjs-caption-containter'));
+    const oldCaptionContainers =
+            Array.from(videoEl.getElementsByClassName('vjs-caption-containter'));
+
     oldCaptionContainers.forEach((e) => e.parentNode.removeChild(e));
 
     // keep a list of created containers. We can reuse ones for captions in the same spot.
@@ -75,52 +142,17 @@ const updateCaption = (player) => {
       let container;
 
       if (containers[`${caption.horizontalPosition}-${caption.verticalPosition}`]) {
-        container = containers[`${caption.horizontalPosition}-${caption.verticalPosition}`];
+        // use the existing div
+        container =
+                containers[`${caption.horizontalPosition}-${caption.verticalPosition}`];
       } else {
-        container = document.createElement('div');
-        containers[`${caption.horizontalPosition}-${caption.verticalPosition}`] = container;
+        // create a new div
+        container = createContainer(caption, player);
+        containers[
+          `${caption.horizontalPosition}-${caption.verticalPosition}`] = container;
       }
 
-      container.direction = settings.language.direction;
-      container.classList.add('vjs-caption-containter');
-      // set the horizontal position
-      if (caption.horizontalPosition) {
-        container.style['text-align'] = caption.horizontalPosition.toLowerCase();
-      } else {
-        container.style['text-align'] = 'center';
-      }
-
-      //set the vertical position
-      if (caption.verticalPosition) {
-        const vp = caption.verticalPosition;
-
-        if (vp === 'BOTTOM') {
-          container.style.bottom = '40px';
-          container.style.top = '';
-        } else if (vp === 'MIDDLE') {
-          container.style.bottom = '';
-          container.style.top = `${player.height()/3 + 10}px`;
-        } else if (vp === 'TOP') {
-          container.style.bottom = '';
-          container.style.top = '10px';
-        }
-      } else {
-        container.bottom = '40px';
-        container.style.top = '';
-      }
-
-      const wrapper = document.createElement('div');
-      const span = document.createElement('div');
-
-      container.appendChild(wrapper);
-      wrapper.appendChild(span);
-      wrapper.classList.add('vjs-caption');
-      span.classList.add('vjs-text');
-
-      videoEl.appendChild(container);
-
-      span.innerHTML = convertToHtml(caption);
-
+      renderCaption(caption, player, container);
       settings.display = captions;
     }
   }
