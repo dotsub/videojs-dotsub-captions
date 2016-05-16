@@ -205,6 +205,8 @@ const setupCaptions = (player) => {
   player.on('captions', (event, data) => setCaptions(player, data));
   player.on('language', (event, data) => setCaptions(player, data));
   player.on('timeupdate', () => updateCaption(player));
+  // update the view using the initial captions
+  updateCaption(player);
 };
 
 /**
