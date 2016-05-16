@@ -1,13 +1,5 @@
 import videojs from 'video.js';
 
-// Array.from polyfill for old browsers
-if (!Array.from) {
-  Array.from = function(object) {
-    'use strict';
-    return [].slice.call(object);
-  };
-}
-
 // Default options for the plugin.
 const defaults = {
   language: { direction: 'ltr' },
@@ -139,7 +131,7 @@ const updateCaption = (player) => {
 
     // clear the existing content
     const oldCaptionContainers =
-            Array.from(videoEl.getElementsByClassName('vjs-caption-containter'));
+            [].slice.call(videoEl.getElementsByClassName('vjs-caption-containter'));
 
     oldCaptionContainers.forEach((e) => e.parentNode.removeChild(e));
 
