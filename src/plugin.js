@@ -1,5 +1,13 @@
 import videojs from 'video.js';
 
+// Array.from polyfill for old browsers
+if (!Array.from) {
+  Array.from = function(object) {
+    'use strict';
+    return [].slice.call(object);
+  };
+}
+
 // Default options for the plugin.
 const defaults = {
   language: { direction: 'ltr' },
