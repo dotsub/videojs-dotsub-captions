@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/dotsub/videojs-dotsub-captions.svg?branch=master)](https://travis-ci.org/dotsub/videojs-dotsub-captions)
+[![Build Status](https://travis-ci.org/dotsub/videojs-dotsub-captions.svg?branch=master)](https://travis-ci.org/dotsub/videojs-dotsub-captions) [![npm version](https://badge.fury.io/js/videojs-dotsub-captions.svg)](https://badge.fury.io/js/videojs-dotsub-captions)
 # videojs-dotsub-captions
 
 Renders rich captions
