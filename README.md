@@ -1,7 +1,15 @@
 [![Build Status](https://travis-ci.org/dotsub/videojs-dotsub-captions.svg?branch=master)](https://travis-ci.org/dotsub/videojs-dotsub-captions) [![npm version](https://badge.fury.io/js/videojs-dotsub-captions.svg)](https://badge.fury.io/js/videojs-dotsub-captions)
 # videojs-dotsub-captions
 
-Renders rich captions
+Renders rich captions in the video player. Includes support for 3x3 positioning and basic rich formatting (bold, underline, italic). This plugin uses events to drive all its actions.
+
+### events
+
+*captionsready*: Denotes when the plugin is loaded and ready to receive captions.
+
+*captions*: This event is used to notify the plugin that there are new captions to be rendered. The captions should be sent as the data payload of the event. ex: `player.trigger('captions', []);` would load an empty set of captions.
+
+*language*: Used to set what language the captions are in. This helps properly set the text direction when applicable. The data payload should be an object containing the direction of the text: `{direction: 'rtl' or 'ltr'}`
 
 ## Installation
 
