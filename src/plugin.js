@@ -60,7 +60,9 @@ const convertToHtml = (caption) => {
 const createContainer = (caption, player) => {
   const container = document.createElement('div');
 
-  container.direction = settings.language.direction;
+  if (settings.language && settings.language.direction) {
+    container.dir = settings.language.direction;
+  }
   container.classList.add('vjs-caption-containter');
   // set the horizontal position
   if (caption.horizontalPosition) {
@@ -203,7 +205,7 @@ const setupCaptions = (player) => {
   player.setLanguage = (langauge) => setLanguage(player, langauge);
   // setup event listeners a well.
   player.on('captions', (event, data) => setCaptions(player, data));
-  player.on('language', (event, data) => setCaptions(player, data));
+  player.on('language', (event, data) => setLanguage(player, data));
   player.on('timeupdate', () => updateCaption(player));
   // update the view using the initial captions
   updateCaption(player);
