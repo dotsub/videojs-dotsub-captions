@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>videojs-dotsub-captions Demo</title>
-  <link href="/node_modules/video.js/dist/video-js.css" rel="stylesheet">
-  <link href="/dist/videojs-dotsub-captions.css" rel="stylesheet">
+  <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
+  <link href="dist/videojs-dotsub-captions.css" rel="stylesheet">
 </head>
 <body>
   <video id="videojs-dotsub-captions-player" class="video-js vjs-default-skin" controls>
@@ -12,15 +12,15 @@
     <source src="//vjs.zencdn.net/v/oceans.webm" type='video/webm'>
   </video>
   <ul>
-    <li><a href="/test/">Run unit tests in browser.</a></li>
+    <li><a href="/test/debug.html">Run unit tests in browser.</a></li>
     
   </ul>
-  <script src="/node_modules/video.js/dist/video.js"></script>
-  <script src="/dist/videojs-dotsub-captions.js"></script>
+  <script src="node_modules/video.js/dist/video.js"></script>
+  <script src="dist/videojs-dotsub-captions.js"></script>
   <script>
     (function(window, videojs) {
-      var player = window.player = videojs('videojs-dotsub-captions-player');
-      player.dotsubCaptions();
+      var examplePlayer = window.examplePlayer = videojs('videojs-dotsub-captions-player');
+      var dotsubCaptions = window.dotsubCaptions = examplePlayer.dotsubCaptions();
     }(window, window.videojs));
   </script>
 </body>

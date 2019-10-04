@@ -1,10 +1,15 @@
 import videojs from 'video.js';
+import {version as VERSION} from '../package.json';
 
 // Default options for the plugin.
 const defaults = {
   language: { direction: 'ltr' },
   captions: []
 };
+
+// Cross-compatibility for Video.js 5 and 6.
+const registerPlugin = videojs.registerPlugin || videojs.plugin;
+// const dom = videojs.dom || videojs;
 
 // the captions being currently displayed.
 let settings = {
@@ -220,7 +225,9 @@ const setupCaptions = (player) => {
  *
  * @function onPlayerReady
  * @param    {Player} player
+ *           A Video.js player object.
  * @param    {Object} [options={}]
+ *           A plain object containing options for the plugin.
  */
 const onPlayerReady = (player, options) => {
   player.addClass('vjs-dotsub-captions');
@@ -245,15 +252,14 @@ const onPlayerReady = (player, options) => {
  */
 const dotsubCaptions = function(options) {
   this.ready(() => {
-    settings = videojs.mergeOptions(defaults, options);
-    onPlayerReady(this, settings);
+    onPlayerReady(this, videojs.mergeOptions(defaults, options));
   });
 };
 
 // Register the plugin with video.js.
-videojs.plugin('dotsubCaptions', dotsubCaptions);
+registerPlugin('dotsubCaptions', dotsubCaptions);
 
 // Include the version number.
-dotsubCaptions.VERSION = '__VERSION__';
+dotsubCaptions.VERSION = VERSION;
 
 export default dotsubCaptions;

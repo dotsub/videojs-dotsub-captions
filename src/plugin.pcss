@@ -1,0 +1,51 @@
+/**
+ * css for videojs-dotsub-captions
+ * With the default plugins for postcss you can
+ * - @import files, they will be inlined during build
+ * - not worry about browser prefixes, they will be handled
+ * - nest selectors. This follows the css specification that is
+ *   currently out on some browsers. See https://tabatkins.github.io/specs/css-nesting/
+ * - custom properties (aka variables) via the var(--var-name) syntax. See
+ *   https://www.w3.org/TR/css-variables-1/
+ */
+
+
+/* Note: all vars must be defined here, there are no "local" vars */
+:root {
+  --main-color: red;
+  --base-font-size: 9;
+  --font-size: 7;
+}
+
+.video-js {
+
+  &.vjs-dotsub-captions {
+    display: block;
+
+    & .vjs-caption-containter {
+      opacity: 0.99;
+      position: absolute;
+      width: 100%;
+      padding: 0 15px;
+      transition: bottom 1.0s;
+
+      & .vjs-caption {
+        color: #fff;
+        font-size: 2em;
+        padding: 5px 0;
+
+        & .vjs-text {
+          display: inline-block;
+          background-color: rgba(0, 0, 0, 0.7);
+          padding: 8px;
+          border-radius: 5px;
+
+          & b {
+            font-weight: 800;
+          }
+        }
+      }
+    }
+  }
+
+}
